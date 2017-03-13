@@ -1,11 +1,14 @@
 import requests
 import json
+import logging
+import sys
 from random import randint
 from flask import Flask, redirect, flash, request, url_for, render_template
+from app.logs.logfile import ContextFilter
 
 create_organization_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/'
 enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/{}/users/{}'
-
+log = ContextFilter
 
 
 def createOrganization(getTitle, netID, blackboard_token):
@@ -24,10 +27,8 @@ def createOrganization(getTitle, netID, blackboard_token):
                           headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
         if r.status_code == 201 or r.status_code == 200:
             flash('You have successfully created an organization', 'success')
-            # enrollUser(createdCourseID,netID,blackboard_token)
+            log.log_to_file(getTitle, netID, createdCourseID)
 
-
-            # record information and store it to log
 
         r.raise_for_status()
 
@@ -55,3 +56,5 @@ def enrollUser(createdCourseID, netID, blackboard_token):
                      headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
     print(r.text)
     print(r.status_code)
+
+

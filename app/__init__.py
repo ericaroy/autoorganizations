@@ -9,7 +9,7 @@ app = Flask(__name__, instance_relative_config=True)
 
 app.config.from_object('config')
 app.secret_key = os.environ['SECRET_KEY']
-#app.config.from_pyfile('config.py')
+
 
 
 @app.route('/')
@@ -30,9 +30,6 @@ def create():
             print(netID)
             blackboard_token = getToken()
             createOrganization(getTitle, netID, blackboard_token)
-
-
-
 
         return redirect('/')
 
