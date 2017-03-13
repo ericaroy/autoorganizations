@@ -28,8 +28,8 @@ def create():
             netID = form.netID.data
             print(getTitle)
             print(netID)
-            blackboard_token = getToken()
-            print(blackboard_token)
+            #blackboard_token = getToken() #delay for now
+
 
             return redirect('/')
 
