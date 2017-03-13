@@ -1,11 +1,14 @@
+import os
 from flask import Flask, render_template, request, flash, redirect
 from app.forms.orgForm import OrgForm
+from app.auth import getToken
 
 
 app = Flask(__name__, instance_relative_config=True)
 
 
 app.config.from_object('config')
+app.secret_key = os.environ['SECRET_KEY']
 #app.config.from_pyfile('config.py')
 
 
@@ -25,6 +28,8 @@ def create():
             netID = form.netID.data
             print(getTitle)
             print(netID)
+            blackboard_token = getToken()
+            print(blackboard_token)
 
             return redirect('/')
 
