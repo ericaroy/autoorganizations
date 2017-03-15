@@ -25,7 +25,9 @@ def createOrganization(getTitle, netID, blackboard_token):
                           headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
         if r.status_code == 201 or r.status_code == 200:
             flash('You have successfully created an organization', 'success')
+            #testing logging
             log.log_to_file(getTitle, netID, createdCourseID)
+            ContextFilter.log_to_file(ContextFilter(getTitle, netID, createdCourseID))
             enroll_user(createdCourseID, netID, blackboard_token)
 
         r.raise_for_status()
@@ -37,7 +39,7 @@ def createOrganization(getTitle, netID, blackboard_token):
             # maybe redirect to a 404 page
             flash('Oops something went wrong, please try again later.', 'warning')
         if e.response.status_code == 400:
-            flash('Please contact system admin - enroy@ualr.edu.', 'danger')
+            flash('Please contact system admin or try again later - enroy@ualr.edu.', 'danger')
             # log
             # send log, redirect and emp
 

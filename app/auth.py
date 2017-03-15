@@ -23,4 +23,3 @@ def get_token():
     except KeyError as e:
         print(e)
 
-get_token()
