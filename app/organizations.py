@@ -27,7 +27,7 @@ def createOrganization(getTitle, netID, blackboard_token):
             flash('You have successfully created an organization', 'success')
             #testing logging
             log.log_to_file(getTitle, netID, createdCourseID)
-            ContextFilter.log_to_file(ContextFilter(getTitle, netID, createdCourseID))
+            ContextFilter.log_to_file(log, getTitle, netID, createdCourseID)
             enroll_user(createdCourseID, netID, blackboard_token)
 
         r.raise_for_status()
