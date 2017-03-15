@@ -2,13 +2,17 @@ import os
 from app.forms.orgForm import OrgForm
 from app.auth import get_token
 from app.organizations import createOrganization
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, redirect
+from flask_cas import CAS, login_required
 
 app = Flask(__name__, instance_relative_config=True)
+CAS(app)
 
 
 app.config.from_object('config')
 app.secret_key = os.environ['SECRET_KEY']
+app.config['CAS_SERVER'] = 'https://netid.ualr.edu/login'
+app.config['CAS_AFTER_LOGIN'] = '/archive'
 
 
 @app.route('/')
@@ -35,3 +39,9 @@ def create():
     else:
         form = OrgForm(csrf_enabled=False)
     return render_template('create.html', form=form)
+
+
+@app.route('/archive')
+@login_required
+def archive():
+    return render_template('archive.html')
