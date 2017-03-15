@@ -25,7 +25,7 @@ def createOrganization(getTitle, netID, blackboard_token):
                           headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
         if r.status_code == 201 or r.status_code == 200:
             flash('You have successfully created an organization', 'success')
-           # log.log_to_file(getTitle, netID, createdCourseID)
+            log.log_to_file(getTitle, netID, createdCourseID)
             enroll_user(createdCourseID, netID, blackboard_token)
 
         r.raise_for_status()
