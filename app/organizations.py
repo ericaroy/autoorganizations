@@ -1,10 +1,8 @@
-import requests
 import json
-import logging
-import sys
 from random import randint
-from flask import Flask, redirect, flash, request, url_for, render_template
-from app.logs.logfile import ContextFilter
+import requests
+from flask import flash
+from app.logfile import ContextFilter
 
 create_organization_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/'
 enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/{}/users/{}'
