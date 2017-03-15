@@ -6,7 +6,7 @@ from app.logfile import ContextFilter
 
 create_organization_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/'
 
-#log = ContextFilter
+log = ContextFilter()
 
 
 def createOrganization(getTitle, netID, blackboard_token):
@@ -25,7 +25,7 @@ def createOrganization(getTitle, netID, blackboard_token):
                           headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
         if r.status_code == 201 or r.status_code == 200:
             flash('You have successfully created an organization', 'success')
-            ContextFilter.log_to_file(getTitle, netID, createdCourseID)
+            log.log_to_file(getTitle, netID, createdCourseID)
             enroll_user(createdCourseID, netID, blackboard_token)
 
         r.raise_for_status()

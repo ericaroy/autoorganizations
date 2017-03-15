@@ -29,8 +29,6 @@ def create():
 
             getTitle = form.title.data
             netID = form.netID.data
-            print(getTitle)
-            print(netID)
             blackboard_token = get_token()
             createOrganization(getTitle, netID, blackboard_token)
 

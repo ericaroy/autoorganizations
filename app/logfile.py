@@ -10,7 +10,7 @@ class ContextFilter(logging.Filter):
     record.hostname = ContextFilter.hostname
     return True
 
-  def log_to_file(getTitle,netID,createdCourseID):
+  def log_to_file(self, getTitle, netID, createdCourseID):
 
       logger = logging.getLogger()
       logger.setLevel(logging.INFO)
