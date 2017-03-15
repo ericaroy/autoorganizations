@@ -25,7 +25,7 @@ class ContextFilter(logging.Filter):
       syslog.setFormatter(formatter)
       logger.addHandler(syslog)
 
-      logging.info('The organization '"{}"' was created by '"{}"', with the ID '"{}"''.format(getTitle,netID,createdCourseID))
+      logging.info('The organization '"{}"' was created by '"{}"', with the ID '"{}"''.format(getTitle, netID, createdCourseID))
 
 
 
