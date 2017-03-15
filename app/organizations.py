@@ -1,11 +1,11 @@
 import json
-from random import randint
 import requests
+from random import randint
 from flask import flash
 from app.logfile import ContextFilter
 
 create_organization_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/'
-enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/{}/users/{}'
+
 log = ContextFilter
 
 
@@ -25,7 +25,8 @@ def createOrganization(getTitle, netID, blackboard_token):
                           headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
         if r.status_code == 201 or r.status_code == 200:
             flash('You have successfully created an organization', 'success')
-            log.log_to_file(getTitle, netID, createdCourseID)
+           # log.log_to_file(getTitle, netID, createdCourseID)
+            enroll_user(createdCourseID, netID, blackboard_token)
 
         r.raise_for_status()
 
@@ -46,10 +47,16 @@ def createOrganization(getTitle, netID, blackboard_token):
 
 
 def enroll_user(createdCourseID, netID, blackboard_token):  # not complete
-    print('was called')
-    r = requests.put(enroll_user_url_path,
+    payload = {'courseRoleId': 'orgmanager'}
+
+    enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/externalId:{}/users/userName:{}'.format(
+        createdCourseID, netID)
+
+    r = requests.put(enroll_user_url_path, data=json.dumps(payload),
                      headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
-    print(r.text)
-    print(r.status_code)
+
+    #do some error catching/response
+
+
 
 

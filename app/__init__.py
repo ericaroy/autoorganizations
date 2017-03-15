@@ -1,15 +1,14 @@
 import os
-from flask import Flask, render_template, request, flash, redirect
 from app.forms.orgForm import OrgForm
-from app.auth import getToken
+from app.auth import get_token
 from app.organizations import createOrganization
+from flask import Flask, render_template, request, flash, redirect
 
 app = Flask(__name__, instance_relative_config=True)
 
 
 app.config.from_object('config')
 app.secret_key = os.environ['SECRET_KEY']
-
 
 
 @app.route('/')
@@ -28,7 +27,7 @@ def create():
             netID = form.netID.data
             print(getTitle)
             print(netID)
-            blackboard_token = getToken()
+            blackboard_token = get_token()
             createOrganization(getTitle, netID, blackboard_token)
 
         return redirect('/')
