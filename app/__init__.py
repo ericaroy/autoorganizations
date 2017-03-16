@@ -11,7 +11,7 @@ CAS(app)
 
 app.config.from_object('config')
 app.secret_key = os.environ['SECRET_KEY']
-app.config['CAS_SERVER'] = 'https://netid.ualr.edu/login'
+app.config['CAS_SERVER'] = 'https://netid.test.ualr.edu'
 app.config['CAS_AFTER_LOGIN'] = '/archive'
 
 
