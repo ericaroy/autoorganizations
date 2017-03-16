@@ -34,7 +34,19 @@
 
             <li><a href='/'></a></li>
 
-            {% block extra_nav %}{% endblock %}
+            {% block extra_nav %}
+             <li class="nav-item active">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+             </li>
+            <li class="nav-item">
+               <!--- <a class="nav-link" href='{{  url_for('about') }}'>About</a>-->
+            </li>
+               <li class="nav-item">
+                <a class="nav-link" href="mailto:enroy@ualr.edu?cc=star@ualr.edu&subject=Blackboard Organizations Tool Help">Support</a>
+            </li>
+
+
+            {% endblock %}
           </ul>
         </div>
       </div>
@@ -42,20 +54,25 @@
     <br>
 
     <div class='container'>
-        <div class="jumbotron">
-            <h1 class="text-center">Blackboard Organizations Tool</h1>
+        <div class="jumbotron text-center">
+            <div class="container">
+            <h1 class="jumbotron-heading">Blackboard Organizations Tool</h1>
+                <p class="lead text-muted">A tool for creating Blackboard organizations automatically.</p>
+                <p>
+          <a href="{{ url_for('create') }}" class="btn btn-primary">Create New Organization</a>
+                    <a href="#" class="btn btn-primary">Bulk User Enroll Tool</a>
+
+          <a href="#" class="btn btn-primary">Un-Enroll</a>
+        </p>
+
+            <!--<h1 class="text-center">Blackboard Organizations Tool</h1>-->
 
 
         </div>
+        </div>
       <div class='row'>
           <div class='col-md-4'>
-          {% block sidebar %}
-          <ul class='well nav nav-stacked'>
-            <li><a href='{{ url_for('create') }}'>Create New Organization</a></li>
-            <li><a href='{{ url_for('archive') }}'>CAS Test</a></li>
-
-          </ul>
-          {% endblock %}
+          <!--- Sidebar can go here if needed -->
         </div>
 
         <div class='col-md-4'>

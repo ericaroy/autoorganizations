@@ -21,6 +21,7 @@ def index():
 
 
 @app.route('/create/', methods=['GET', 'POST'])
+@login_required
 def create():
     if request.method == 'POST':
         form = OrgForm(request.form, csrf_enabled=False)
@@ -43,3 +44,8 @@ def create():
 @login_required
 def archive():
     return render_template('archive.html')
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
