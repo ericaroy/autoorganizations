@@ -12,7 +12,8 @@ CAS(app)
 app.config.from_object('config')
 app.secret_key = os.environ['SECRET_KEY']
 app.config['CAS_SERVER'] = 'https://netid.test.ualr.edu'
-app.config['CAS_AFTER_LOGIN'] = '/create/'
+app.config['CAS_AFTER_LOGIN'] = 'create'
+
 
 
 @app.route('/')
@@ -21,7 +22,6 @@ def index():
 
 
 @app.route('/create/', methods=['GET', 'POST'])
-@login_required
 def create():
     if request.method == 'POST':
         form = OrgForm(request.form, csrf_enabled=False)
@@ -40,12 +40,9 @@ def create():
     return render_template('create.html', form=form)
 
 
+
 @app.route('/archive')
 @login_required
 def archive():
     return render_template('archive.html')
 
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
