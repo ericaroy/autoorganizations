@@ -40,7 +40,7 @@ def createOrganization(getTitle, netID, blackboard_token):
         r = requests.post(create_organization_url_path, data=json.dumps(payload),
                           headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
         if r.status_code == 201 or r.status_code == 200:
-            flash('You have successfully created an organization', 'success')
+            flash('Thank you. Your request is being processed.', 'success')
             # testing logging
             # log.log_to_file(getTitle, netID, createdCourseID)
             send_mail(getTitle, netID, createdCourseID)

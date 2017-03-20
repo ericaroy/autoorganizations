@@ -11,6 +11,15 @@
 
     <script src='https://code.jquery.com/jquery-1.10.2.min.js'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+  <script>$(document).ready(function () {
+    $("#createButton").click(function () {
+        setTimeout(function () { disableButton(); }, 0);
+    });
+
+    function disableButton() {
+        $("#createButton").prop('disabled', true);
+    }
+});</script>
     {% block extra_scripts %}{% endblock %}
   </head>
 
@@ -89,5 +98,6 @@
         </div>
       </div>
        </div>
+
   </body>
 </html>

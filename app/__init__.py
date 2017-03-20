@@ -6,13 +6,13 @@ from flask import Flask, render_template, request, redirect
 from flask_cas import CAS, login_required
 
 app = Flask(__name__, instance_relative_config=True)
-CAS(app)
+cas = CAS(app)
 
 
 app.config.from_object('config')
 app.secret_key = os.environ['SECRET_KEY']
 app.config['CAS_SERVER'] = 'https://netid.test.ualr.edu'
-app.config['CAS_AFTER_LOGIN'] = 'create'
+app.config['CAS_AFTER_LOGIN'] = 'https://ualr.edu'
 
 
 
@@ -45,5 +45,6 @@ def create():
 @app.route('/archive')
 @login_required
 def archive():
-    return render_template('archive.html')
+    print(username=cas.username)
+    return render_template('create.html')
 
