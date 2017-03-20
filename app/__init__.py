@@ -16,6 +16,7 @@ app.config['CAS_AFTER_LOGIN'] = 'create'
 
 
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -33,7 +34,7 @@ def create():
             blackboard_token = get_token()
             createOrganization(getTitle, netID, blackboard_token)
 
-        return redirect('/')
+            return redirect('/')
 
     else:
         form = OrgForm(csrf_enabled=False)

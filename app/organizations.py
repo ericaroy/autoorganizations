@@ -1,12 +1,28 @@
 import json
+import os
 import requests
 from random import randint
 from flask import flash
 from app.logfile import ContextFilter
+from flask.ext.mail import Mail, Message
+from flask import Flask
+
+
+app = Flask(__name__)
+
 
 create_organization_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/'
 
 log = ContextFilter()
+
+app.config.update(dict(
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=587,
+    MAIL_USE_TLS=True,
+    MAIL_USE_SSL=False,
+    MAIL_USERNAME=os.environ['UALR_USERNAME'],
+    MAIL_PASSWORD=os.environ['UALR_PASSWORD'],
+))
 
 
 def createOrganization(getTitle, netID, blackboard_token):
@@ -27,6 +43,7 @@ def createOrganization(getTitle, netID, blackboard_token):
             flash('You have successfully created an organization', 'success')
             # testing logging
             # log.log_to_file(getTitle, netID, createdCourseID)
+            send_mail(getTitle, netID, createdCourseID)
             enroll_user(createdCourseID, netID, blackboard_token)
 
         r.raise_for_status()
@@ -56,8 +73,14 @@ def enroll_user(createdCourseID, netID, blackboard_token):  # not complete
     r = requests.put(enroll_user_url_path, data=json.dumps(payload),
                      headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
 
-    #do some error catching/response
+mail = Mail(app) # might pull this out in its own file later, working now
 
-
-
-
+def send_mail(organization_name, net_id, organization_id):
+	msg = Message(
+        'Automatic Blackboard Organization Created',
+	       sender='enroy@ualr.edu',
+	       recipients=
+               ['enroy@ualr.edu'])
+	msg.body = "An organization was just created named {} by {}, organization id is {}".format(organization_name,net_id,organization_id)
+	mail.send(msg)
+	return "Sent"
