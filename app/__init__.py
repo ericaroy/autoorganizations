@@ -29,7 +29,7 @@ def create():
 
         if form.validate_on_submit():
 
-            getTitle = form.title.data
+            getTitle = form.title.data.title()
             netID = form.netID.data
             blackboard_token = get_token()
             createOrganization(getTitle, netID, blackboard_token)

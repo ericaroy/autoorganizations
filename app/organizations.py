@@ -66,6 +66,7 @@ def createOrganization(getTitle, netID, blackboard_token):
 
 def enroll_user(createdCourseID, netID, blackboard_token):  # not complete
     payload = {'courseRoleId': 'orgmanager'}
+    #make a call to api to check if user is valid, if so, go ahead and enroll, if not send email to admin with info as the org will still be created.
 
     enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/externalId:{}/users/userName:{}'.format(
         createdCourseID, netID)
