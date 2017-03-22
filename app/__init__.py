@@ -1,7 +1,7 @@
 import os
 from app.forms.orgForm import OrgForm
 from app.auth import get_token
-from app.organizations import createOrganization
+from app.organizations import createOrganization, check_netid
 from flask import Flask, render_template, request, redirect
 from flask_cas import CAS, login_required
 
@@ -12,7 +12,7 @@ cas = CAS(app)
 app.config.from_object('config')
 app.secret_key = os.environ['SECRET_KEY']
 app.config['CAS_SERVER'] = 'https://netid.test.ualr.edu'
-app.config['CAS_AFTER_LOGIN'] = 'https://ualr.edu'
+app.config['CAS_AFTER_LOGIN'] = 'https://ualr.edu' # test failing here
 
 
 
@@ -32,7 +32,8 @@ def create():
             getTitle = form.title.data.title()
             netID = form.netID.data
             blackboard_token = get_token()
-            createOrganization(getTitle, netID, blackboard_token)
+            check_netid(netID, blackboard_token, getTitle)
+            #createOrganization(getTitle, netID, blackboard_token)
 
             return redirect('/')
 

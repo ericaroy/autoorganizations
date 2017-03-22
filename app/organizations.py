@@ -66,8 +66,6 @@ def createOrganization(getTitle, netID, blackboard_token):
 
 def enroll_user(createdCourseID, netID, blackboard_token):  # not complete
     payload = {'courseRoleId': 'orgmanager'}
-    #make a call to api to check if user is valid, if so, go ahead and enroll, if not send email to admin with info as the org will still be created.
-
     enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/externalId:{}/users/userName:{}'.format(
         createdCourseID, netID)
 
@@ -85,3 +83,29 @@ def send_mail(organization_name, net_id, organization_id):
 	msg.body = "An organization was just created named {} by {}, organization id is {}".format(organization_name,net_id,organization_id)
 	mail.send(msg)
 	return "Sent"
+
+
+def check_netid(netID, blackboard_token, getTitle):
+
+
+    check_user_path_url = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/users/userName:{}'.format(netID)
+
+
+    r = requests.get(check_user_path_url,headers={'Authorization': blackboard_token})
+    if r.status_code == 200:
+        createOrganization(getTitle, netID, blackboard_token)
+        x = json.loads(r.text)
+        print(x)
+
+    if r.status_code == 404:
+        flash('You have entered an invalid ID, try again', 'danger')
+
+
+#cache this call
+
+
+
+
+
+
+
