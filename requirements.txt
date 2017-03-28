@@ -10,4 +10,4 @@ requests==2.13.0
 requests-oauthlib==0.8.0
 Werkzeug==0.12
 WTForms==2.1
-git+git://github.com/kylekoza/Flask-CAS.git
+Flask-Cas==1.0.0
