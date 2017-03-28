@@ -4,8 +4,8 @@ import requests
 from random import randint
 from flask import flash
 from app.logfile import ContextFilter
-from flask.ext.mail import Mail, Message
-from flask import Flask
+from flask_mail import Mail, Message
+from flask import Flask, redirect
 
 
 app = Flask(__name__)
@@ -25,7 +25,7 @@ app.config.update(dict(
 ))
 
 
-def createOrganization(getTitle, netID, blackboard_token):
+def createOrganization(getTitle, netID, blackboard_token, user_email):
     # generate org ID
     f = randint(1, 1000)
     sep = '_'
@@ -43,7 +43,7 @@ def createOrganization(getTitle, netID, blackboard_token):
             flash('Thank you. Your request is being processed.', 'success')
             # testing logging
             # log.log_to_file(getTitle, netID, createdCourseID)
-            send_mail(getTitle, netID, createdCourseID)
+            send_mail(getTitle, netID, createdCourseID, user_email)
             enroll_user(createdCourseID, netID, blackboard_token)
 
         r.raise_for_status()
@@ -66,6 +66,8 @@ def createOrganization(getTitle, netID, blackboard_token):
 
 def enroll_user(createdCourseID, netID, blackboard_token):  # not complete
     payload = {'courseRoleId': 'orgmanager'}
+
+
     enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/externalId:{}/users/userName:{}'.format(
         createdCourseID, netID)
 
@@ -74,31 +76,55 @@ def enroll_user(createdCourseID, netID, blackboard_token):  # not complete
 
 mail = Mail(app) # might pull this out in its own file later, working now
 
-def send_mail(organization_name, net_id, organization_id):
-	msg = Message(
-        'Automatic Blackboard Organization Created',
-	       sender='enroy@ualr.edu',
-	       recipients=
-               ['enroy@ualr.edu'])
-	msg.body = "An organization was just created named {} by {}, organization id is {}".format(organization_name,net_id,organization_id)
-	mail.send(msg)
-	return "Sent"
+
+def send_mail(organization_name, net_id, organization_id, user_email):
+
+    if net_id != os.environ['ADMIN_ID']:
+        msg = Message('Blackboard Organization request received', sender='enroy@ualr.edu', recipients=[user_email])
+        msg.body = 'Hi, we have received your request to create a new Blackboard organization, ' \
+                   'please check Blackboard in the next 30 minutes - 1 hour.'
+        mail.send(msg)
+        return 'Sent'
+    else:
+        msg = Message(
+            'Automatic Blackboard Organization Created',
+            sender='enroy@ualr.edu',
+            recipients=
+            ['enroy@ualr.edu'])  # send this to log eventually
+        msg.body = "An organization was just created named {} by {}, organization id is {}".format(organization_name,
+                                                                                                   net_id,
+                                                                                                   organization_id)
+        mail.send(msg)
+        return "Sent"
 
 
 def check_netid(netID, blackboard_token, getTitle):
-
-
     check_user_path_url = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/users/userName:{}'.format(netID)
+    try:
+        r = requests.get(check_user_path_url, headers={'Authorization': blackboard_token})
+        if r.status_code == 200:
+            x = json.loads(r.text)
+            user_email = x['contact']['email']
+            print(os.environ['ADMIN_ID'])
+            createOrganization(getTitle, netID, blackboard_token, user_email)
+
+        if r.status_code == 404:
+            flash('User not found, please try again later', 'danger')
+
+            # log it
+    except requests.exceptions.HTTPError as e:
+
+        if e.response.status_code == 400:
+            flash('Invalid ID, a message has been sent to the system admin', 'warning')
 
 
-    r = requests.get(check_user_path_url,headers={'Authorization': blackboard_token})
-    if r.status_code == 200:
-        createOrganization(getTitle, netID, blackboard_token)
-        x = json.loads(r.text)
-        print(x)
+            # log it
 
-    if r.status_code == 404:
-        flash('You have entered an invalid ID, try again', 'danger')
+
+
+
+
+
 
 
 #cache this call

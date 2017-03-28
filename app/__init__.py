@@ -25,7 +25,7 @@ def index():
 @app.route('/create/', methods=['GET', 'POST'])
 def create():
     if request.method == 'POST':
-        form = OrgForm(request.form, csrf_enabled=False)
+        form = OrgForm(request.form, csrf_enabled=True)
 
         if form.validate_on_submit():
 
@@ -38,7 +38,7 @@ def create():
             return redirect('/')
 
     else:
-        form = OrgForm(csrf_enabled=False)
+        form = OrgForm(csrf_enabled=True)
     return render_template('create.html', form=form)
 
 
