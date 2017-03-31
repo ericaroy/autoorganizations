@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, redirect
 from flask_cas import CAS, login_required
 
 app = Flask(__name__, instance_relative_config=True)
+app.config['PROPAGATE_EXCEPTIONS'] = True
 cas = CAS(app)
 
 
