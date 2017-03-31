@@ -22,7 +22,6 @@ def index():
 
 
 @app.route('/create/', methods=['GET', 'POST'])
-@login_required
 def create():
     if request.method == 'POST':
         form = OrgForm(request.form, csrf_enabled=True)
