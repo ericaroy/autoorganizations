@@ -67,14 +67,13 @@ def createOrganization(getTitle, netID, blackboard_token, user_email):
 def enroll_user(createdCourseID, netID, blackboard_token):  # not complete
     payload = {'courseRoleId': 'orgmanager'}
 
-
     enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/externalId:{}/users/userName:{}'.format(
         createdCourseID, netID)
 
     r = requests.put(enroll_user_url_path, data=json.dumps(payload),
                      headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
 
-mail = Mail(app) # might pull this out in its own file later, working now
+mail = Mail(app)  # might pull this out in its own file later, working now
 
 
 def send_mail(organization_name, net_id, organization_id, user_email):
@@ -116,19 +115,6 @@ def check_netid(netID, blackboard_token, getTitle):
 
         if e.response.status_code == 400:
             flash('Invalid ID, a message has been sent to the system admin', 'warning')
-
-
-            # log it
-
-
-
-
-
-
-
-
-#cache this call
-
 
 
 

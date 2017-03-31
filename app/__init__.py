@@ -12,9 +12,7 @@ cas = CAS(app)
 app.config.from_object('config')
 app.secret_key = os.environ['SECRET_KEY']
 app.config['CAS_SERVER'] = 'https://netid.test.ualr.edu'
-app.config['CAS_AFTER_LOGIN'] = 'https://ualr.edu' # test failing here
-
-
+app.config['CAS_AFTER_LOGIN'] = '/create/'
 
 
 @app.route('/')
@@ -33,7 +31,6 @@ def create():
             netID = form.netID.data
             blackboard_token = get_token()
             check_netid(netID, blackboard_token, getTitle)
-            #createOrganization(getTitle, netID, blackboard_token)
 
             return redirect('/')
 
@@ -42,9 +39,9 @@ def create():
     return render_template('create.html', form=form)
 
 
-
 @app.route('/archive')
 @login_required
 def archive():
-    return render_template('create.html')
+    return render_template('create.html', username=cas.username)
+
 
