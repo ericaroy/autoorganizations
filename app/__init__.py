@@ -47,7 +47,7 @@ def create():
 @app.route('/archive/')
 @login_required
 def archive():
-    return render_template('create.html', username=cas.username)
+    return render_template('archive.html', username=cas.username)
 
 
 
