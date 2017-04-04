@@ -2,8 +2,8 @@ import os
 import sys
 import logging
 import flask
-import urllib
 from urllib.parse import urlparse
+import urllib
 import argparse
 from app.forms.orgForm import OrgForm
 from app.auth import get_token
