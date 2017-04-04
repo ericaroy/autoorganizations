@@ -1,24 +1,21 @@
 import os
 import sys
 import logging
-import flask
 from app.forms.orgForm import OrgForm
 from app.auth import get_token
 from app.organizations import createOrganization, check_netid
 from flask import Flask, render_template, request, redirect
-from flask_cas import CAS, login_required
+
 
 app = Flask(__name__, instance_relative_config=True)
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
-cas = CAS(app)
 
 
 app.config.from_object('config')
 app.secret_key = os.environ['SECRET_KEY']
-app.config['CAS_SERVER'] = 'https://netid.test.ualr.edu'
-app.config['CAS_AFTER_LOGIN'] = 'create'
+
 
 
 @app.route('/')
@@ -43,15 +40,3 @@ def create():
     else:
         form = OrgForm(csrf_enabled=True)
     return render_template('create.html', form=form)
-
-
-@app.route('/login/')
-def route_login():
-
-    if 'ticket' in Flask:
-        flask.session['_cas_token'] = flask.request.args['ticket']
-        redirect_url = flask.url_for('create')
-
-
-
-    return flask.redirect(redirect_url)
