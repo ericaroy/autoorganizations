@@ -5,7 +5,7 @@ from random import randint
 from flask import flash
 from app.logfile import ContextFilter
 from flask_mail import Mail, Message
-from flask import Flask, redirect
+from flask import Flask
 
 
 app = Flask(__name__)
@@ -25,16 +25,16 @@ app.config.update(dict(
 ))
 
 
-def createOrganization(getTitle, netID, blackboard_token, user_email):
+def create_organization(get_title, net_id, blackboard_token, user_email):
     # generate org ID
     f = randint(1, 1000)
     sep = '_'
-    x = getTitle.split()
-    createdCourseID = sep.join(x) + '_' + str(f)
+    x = get_title.split()
+    created_courseid = sep.join(x) + '_' + str(f)
 
     payload = {'courseId': '', 'name': '', 'organization': 'true', 'enrollment': {'type': 'SelfEnrollment'}}
-    payload['name'] = getTitle
-    payload['courseId'] = createdCourseID
+    payload['name'] = get_title
+    payload['courseId'] = created_courseid
 
     try:
         r = requests.post(create_organization_url_path, data=json.dumps(payload),
@@ -43,8 +43,8 @@ def createOrganization(getTitle, netID, blackboard_token, user_email):
             flash('Thank you. Your request is being processed.', 'success')
             # testing logging
             # log.log_to_file(getTitle, netID, createdCourseID)
-            send_mail(getTitle, netID, createdCourseID, user_email)
-            enroll_user(createdCourseID, netID, blackboard_token)
+            send_mail(get_title, net_id, created_courseid, user_email)
+            enroll_user(created_courseid, net_id, blackboard_token)
 
         r.raise_for_status()
 
@@ -64,11 +64,11 @@ def createOrganization(getTitle, netID, blackboard_token, user_email):
         flash('Connection Timed Out, Try Again.', 'warning')
 
 
-def enroll_user(createdCourseID, netID, blackboard_token):  # not complete
+def enroll_user(created_courseid, net_id, blackboard_token):  # not complete
     payload = {'courseRoleId': 'orgmanager'}
 
-    enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/courses/externalId:{}/users/userName:{}'.format(
-        createdCourseID, netID)
+    enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public' \
+                           '/v1/courses/externalId:{}/users/userName:{}'.format(created_courseid, net_id)
 
     r = requests.put(enroll_user_url_path, data=json.dumps(payload),
                      headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
@@ -97,20 +97,18 @@ def send_mail(organization_name, net_id, organization_id, user_email):
         return "Sent"
 
 
-def check_netid(netID, blackboard_token, getTitle):
-    check_user_path_url = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/users/userName:{}'.format(netID)
+def check_netid(net_id, blackboard_token, get_title):
+    check_user_path_url = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/users/userName:{}'.format(net_id)
     try:
         r = requests.get(check_user_path_url, headers={'Authorization': blackboard_token})
         if r.status_code == 200:
             x = json.loads(r.text)
             user_email = x['contact']['email']
-            print(os.environ['ADMIN_ID'])
-            createOrganization(getTitle, netID, blackboard_token, user_email)
+            create_organization(get_title, net_id, blackboard_token, user_email)
 
         if r.status_code == 404:
             flash('User not found, please try again later', 'danger')
 
-            # log it
     except requests.exceptions.HTTPError as e:
 
         if e.response.status_code == 400:

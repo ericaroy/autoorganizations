@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Create new entry{% endblock %}
+{% block title %}Create Organization{% endblock %}
 
-{% block content_title %}Create Organization{% endblock %}
-
+{% block content_title %}{% endblock %}
 {% block content %}
 <br>
   <form action='{{ url_for('create') }}' class='form form-horizontal' method='post'>
     {% for field in form %}
       <div class='form-group{% if field.errors %} has-error has-feedback{% endif %}'>
-        {{ field.label(class='col-sm-3 control-label') }}
+
         <div class='col-sm-9'>
           {{ field(class='form-control') }}
           {% if field.errors %}
