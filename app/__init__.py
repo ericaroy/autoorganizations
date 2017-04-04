@@ -1,4 +1,6 @@
 import os
+import sys
+import logging
 from app.forms.orgForm import OrgForm
 from app.auth import get_token
 from app.organizations import createOrganization, check_netid
@@ -7,6 +9,8 @@ from flask_cas import CAS, login_required
 
 app = Flask(__name__, instance_relative_config=True)
 app.config['PROPAGATE_EXCEPTIONS'] = True
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 cas = CAS(app)
 
 
@@ -40,9 +44,12 @@ def create():
     return render_template('create.html', form=form)
 
 
-@app.route('/archive')
+@app.route('/archive/')
 @login_required
 def archive():
     return render_template('create.html', username=cas.username)
+
+
+
 
 
