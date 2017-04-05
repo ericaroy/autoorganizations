@@ -5,7 +5,9 @@
 {% block content_title %}{% endblock %}
 {% block content %}
 <br>
-  <form action='{{ url_for('create') }}' class='form form-horizontal' method='post'>
+
+<div class='.col-md-4'>
+  <form action='{{ url_for('create') }}' class='form form-horizontal' method='post' >
     {% for field in form %}
       <div class='form-group{% if field.errors %} has-error has-feedback{% endif %}'>
 
@@ -25,4 +27,5 @@
       </div>
     </div>
   </form>
+    </div>
 {% endblock %}

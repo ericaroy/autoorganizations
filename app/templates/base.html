@@ -67,22 +67,23 @@
             <h1 class="jumbotron-heading">Blackboard Organizations Tool</h1>
                 <p class="lead text-muted">A tool for creating Blackboard organizations automatically.</p>
                 <p>
-          <a href="{{ url_for('create') }}" class="btn btn-primary">Create New Organization</a>
-                    <a href="#" class="btn btn-primary">Bulk User Enroll Tool</a>
+          <a href="{{ url_for('create') }}" class="btn btn-primary">Create Organization</a>
+                    <a href="{{ url_for('enrolltools') }}" class="btn btn-primary">Enrollment Tools</a>
         </p>
 
 
         </div>
         </div>
       <div class='row'>
-          <div class='col-md-4'>
+      <div class='col-md-4'>
           <!--- Sidebar can go here if needed -->
         </div>
+
 
         <div class='col-md-4'>
           <h1>{% block content_title %}{% endblock %}</h1>
 
-          <hr>
+
           {% for category, message in get_flashed_messages(with_categories=true) %}
             <div class='alert alert-dismissable alert-{{ category }}'>
               <button type='button' class='close' data-dismiss='alert'>&times;</button>
@@ -94,6 +95,7 @@
         </div>
       </div>
        </div>
+
 
   </body>
 </html>

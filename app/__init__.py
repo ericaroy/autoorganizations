@@ -39,3 +39,8 @@ def create():
     else:
         form = OrgForm(csrf_enabled=True)
     return render_template('create.html', form=form)
+
+
+@app.route('/enrolltools/')
+def enrolltools():
+    return render_template('enrolltools.html')
