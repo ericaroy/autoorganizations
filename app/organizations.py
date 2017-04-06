@@ -40,7 +40,7 @@ def create_organization(get_title, net_id, blackboard_token, user_email):
         r = requests.post(create_organization_url_path, data=json.dumps(payload),
                           headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
         if r.status_code == 201 or r.status_code == 200:
-            flash('Thank you. Your request is being processed.', 'success')
+            flash('Thank you. Your request is being processed. Please check Blackboard in the next 30 minutes - 1 hour.', 'success')
             # testing logging
             # log.log_to_file(getTitle, netID, createdCourseID)
             send_mail(get_title, net_id, created_courseid, user_email)
@@ -78,21 +78,14 @@ mail = Mail(app)  # might pull this out in its own file later, working now
 
 def send_mail(organization_name, net_id, organization_id, user_email):
 
-    if net_id != os.environ['ADMIN_ID']:
-        msg = Message('Blackboard Organization request received', sender='enroy@ualr.edu', recipients=[user_email])
-        msg.body = 'Hi, we have received your request to create a new Blackboard organization, ' \
-                   'please check Blackboard in the next 30 minutes - 1 hour.'
-        mail.send(msg)
-        return 'Sent'
-    else:
         msg = Message(
             'Automatic Blackboard Organization Created',
             sender='enroy@ualr.edu',
             recipients=
             ['enroy@ualr.edu'])  # send this to log eventually
-        msg.body = "An organization was just created named {} by {}, organization id is {}".format(organization_name,
+        msg.body = "An organization was just created named {} by {}, organization id is {}, contact {}.".format(organization_name,
                                                                                                    net_id,
-                                                                                                   organization_id)
+                                                                                                   organization_id, user_email)
         mail.send(msg)
         return "Sent"
 
