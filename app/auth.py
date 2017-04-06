@@ -7,7 +7,7 @@ client_id = os.environ['BLACKBOARD_SECRET_KEY']  # Configuration.BLACKBOARD_SECR
 client_secret = os.environ['BLACKBOARD_SECRET_SECRET']  # Configuration.BLACKBOARD_SECRET_SECRET
 client = BackendApplicationClient(client_id=client_id)
 oauth = OAuth2Session(client=client)
-token_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/oauth2/token'
+token_url_path = 'https://blackboard.ualr.edu/learn/api/public/v1/oauth2/token'
 
 
 def get_token():
