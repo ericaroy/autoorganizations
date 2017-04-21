@@ -83,9 +83,9 @@ def send_mail(organization_name, net_id, organization_id, user_email):
             sender='enroy@ualr.edu',
             recipients=
             ['enroy@ualr.edu'])  # send this to log eventually
-        msg.body = "An organization was just created named {} by {}, organization id is {}, contact {}.".format(organization_name,
-                                                                                                   net_id,
-                                                                                                   organization_id, user_email)
+        msg.body = "An organization was just created named {} by {}, " \
+                   "organization id is {}, contact {}."\
+            .format(organization_name,net_id,organization_id, user_email)
         mail.send(msg)
         return "Sent"
 
