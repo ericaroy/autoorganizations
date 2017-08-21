@@ -11,7 +11,7 @@ from flask import Flask
 app = Flask(__name__)
 
 
-create_organization_url_path = os.environ['BLACKBOARD_URL']
+#create_organization_url_path = os.environ['BLACKBOARD_URL']
 
 log = ContextFilter()
 
