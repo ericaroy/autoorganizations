@@ -11,7 +11,7 @@ from flask import Flask
 app = Flask(__name__)
 
 
-create_organization_url_path = 'https://blackboard.ualr.edu/learn/api/public/v1/courses/'
+create_organization_url_path = os.environ['BLACKBOARD_URL']
 
 log = ContextFilter()
 
@@ -67,31 +67,31 @@ def create_organization(get_title, net_id, blackboard_token, user_email):
 def enroll_user(created_courseid, net_id, blackboard_token):  # not complete
     payload = {'courseRoleId': 'orgmanager'}
 
-    enroll_user_url_path = 'https://blackboard.ualr.edu/learn/api/public' \
+    enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public' \
                            '/v1/courses/externalId:{}/users/userName:{}'.format(created_courseid, net_id)
 
     r = requests.put(enroll_user_url_path, data=json.dumps(payload),
                      headers={'Authorization': blackboard_token, 'Content-Type': 'application/json'})
 
-mail = Mail(app)  # might pull this out in its own file later, working now
+    mail = Mail(app)  # might pull this out in its own file later, working now
 
 
 def send_mail(organization_name, net_id, organization_id, user_email):
 
         msg = Message(
             'Automatic Blackboard Organization Created',
-            sender='enroy@ualr.edu',
+            sender=os.environ['UALR_USERNAME'],
             recipients=
-            ['enroy@ualr.edu'])  # send this to log eventually
-        msg.body = "An organization was just created named {} by {}, " \
-                   "organization id is {}, contact {}."\
-            .format(organization_name,net_id,organization_id, user_email)
+            os.environ['UALR_USERNAME'])  # send this to log eventually
+        msg.body = "An organization was just created named {} by {}. " \
+                   "The organization id is {}, contact {} to confirm."\
+            .format(organization_name, net_id, organization_id, user_email)
         mail.send(msg)
         return "Sent"
 
 
 def check_netid(net_id, blackboard_token, get_title):
-    check_user_path_url = 'https://blackboard.ualr.edu/learn/api/public/v1/users/userName:{}'.format(net_id)
+    check_user_path_url = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/users/userName:{}'.format(net_id)
     try:
         r = requests.get(check_user_path_url, headers={'Authorization': blackboard_token})
         if r.status_code == 200:
