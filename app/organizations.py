@@ -67,7 +67,7 @@ def create_organization(get_title, net_id, blackboard_token, user_email):
 def enroll_user(created_courseid, net_id, blackboard_token):  # not complete
     payload = {'courseRoleId': 'orgmanager'}
 
-    enroll_user_url_path = 'https://blackboard-staging.test.ualr.edu/learn/api/public' \
+    enroll_user_url_path = 'https://#/learn/api/public' \
                            '/v1/courses/externalId:{}/users/userName:{}'.format(created_courseid, net_id)
 
     r = requests.put(enroll_user_url_path, data=json.dumps(payload),
@@ -91,7 +91,7 @@ def send_mail(organization_name, net_id, organization_id, user_email):
 
 
 def check_netid(net_id, blackboard_token, get_title):
-    check_user_path_url = 'https://blackboard-staging.test.ualr.edu/learn/api/public/v1/users/userName:{}'.format(net_id)
+    check_user_path_url = 'https://#/learn/api/public/v1/users/userName:{}'.format(net_id)
     try:
         r = requests.get(check_user_path_url, headers={'Authorization': blackboard_token})
         if r.status_code == 200:
